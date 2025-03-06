@@ -1,0 +1,22 @@
+[
+    {
+        "part_type": "Frame",
+        "name": "Full-suspension",
+        "stock_status": "available"
+    },
+    {
+        "part_type": "Frame",
+        "name": "Diamond",
+        "stock_status": "available"
+    },
+    {
+        "part_type": "Wheels",
+        "name": "Mountain wheels",
+        "stock_status": "available"
+    },
+    {
+        "part_type": "Rim Color",
+        "name": "Black",
+        "stock_status": "available"
+    }
+]

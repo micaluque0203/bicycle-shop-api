@@ -1,0 +1,41 @@
+{
+    "id": "bike-001",
+    "name": "Mountain Bike",
+    "category": "Bicycle",
+    "available_parts": [
+        {
+            "part_type": "Frame",
+            "name": "Full-suspension",
+            "stock_status": "available"
+        },
+        {
+            "part_type": "Frame",
+            "name": "Diamond",
+            "stock_status": "available"
+        },
+        {
+            "part_type": "Wheels",
+            "name": "Mountain wheels",
+            "stock_status": "available"
+        },
+        {
+            "part_type": "Rim Color",
+            "name": "Black",
+            "stock_status": "out_of_stock"
+        },
+        {
+            "part_type": "Rim Color",
+            "name": "Red",
+            "stock_status": "available"
+        }
+    ],
+    "configuration_rules": [
+        {
+            "depends_on": "Wheels",
+            "depends_value": "Mountain wheels",
+            "forbidden_values": [
+                "Diamond"
+            ]
+        }
+    ]
+}

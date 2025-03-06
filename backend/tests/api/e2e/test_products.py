@@ -1,9 +1,8 @@
+import pytest
 import json
 
-import pytest
-
-from src.api.auth import get_user_manager
 from src.api.schemas.models import UserCreate
+from api.dependencies.auth import get_user_manager
 
 
 @pytest.fixture(scope="module")

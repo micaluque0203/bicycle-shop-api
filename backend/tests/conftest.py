@@ -1,29 +1,36 @@
-import asyncio
-from typing import Annotated, Awaitable, Callable, Generator, TypeVar, get_args
-from unittest.mock import patch
-
-import fastapi_users
 import fastapi_users.fastapi_users
 import pytest
-import pytest_asyncio
+from unittest.mock import patch
 from beanie import init_beanie
-from fastapi import Depends, FastAPI, params
+from src.api.schemas.models import User
+from motor.motor_asyncio import AsyncIOMotorClient
+from httpx import AsyncClient
+import asyncio
+import fastapi_users
+
+import pytest
+from src.modules.products.infrastructure.product_repository import (
+    MongoDBProductRepository,
+)
+from fastapi import params
+from typing import Annotated, TypeVar, get_args, Generator
+from src.api.schemas.models import User
+from fastapi import FastAPI, Depends
+from httpx import AsyncClient
+from typing import Callable, Awaitable
 from fastapi.testclient import TestClient
 from httpx import ASGITransport, AsyncClient
-from motor.motor_asyncio import AsyncIOMotorClient
-
-from src.api.auth import current_superuser, get_current_superuser
-from src.api.main import app
-from src.api.schemas.models import User
+import pytest_asyncio
 from src.api.settings import settings
-from src.modules.products.infrastructure.product_repository import \
-    MongoDBProductRepository
+from api.dependencies.auth import current_superuser, get_current_superuser
+from src.api.main import app
 
 T = TypeVar("T")
 
 AuthenticatedUser = Annotated[User, Depends(current_superuser)]
 GetAuthenticatedAsyncClient = Callable[[User], Awaitable[AsyncClient]]
-from src.api.infrastructure.repo import mongodb_instance
+from api.infrastructure.client import mongodb_instance
+
 
 # @pytest.fixture(scope="session")
 # def app() -> Generator[FastAPI, None, None]:

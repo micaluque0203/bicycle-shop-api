@@ -1,0 +1,15 @@
+{
+    "order_id": "order-001",
+    "customer_name": "John Doe",
+    "user_id": "user-123",
+    "order_items": [
+        {
+            "options": {
+                "Frame": "Full-suspension",
+                "Wheels": "Mountain wheels",
+                "Rim Color": "Black"
+            }
+        }
+    ],
+    "status": "pending"
+}

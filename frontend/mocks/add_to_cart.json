@@ -1,0 +1,10 @@
+{
+    "configuration": {
+        "options": {
+            "Frame": "Full-suspension",
+            "Wheels": "Mountain wheels",
+            "Rim Color": "Black"
+        }
+    },
+    "product_id": "bike-001"
+}
