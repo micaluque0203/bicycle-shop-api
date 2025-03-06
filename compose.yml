@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: my-mongo-container
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    ports:
+      - "27017:27017"
+
+  fastapi:
+    build:
+      context: .
+      dockerfile: ./backend/src/api/Dockerfile
+    container_name: fastapi-container
+    command: ["/api/entrypoint.sh"]
+    volumes:
+      - ./backend/src/api:/api
+      - ./backend/pyproject.toml:/api/pyproject.toml
+      - ./backend/poetry.lock:/api/poetry.lock
+      - ./backend/README.md:/api/README.md
+    ports:
+      - "8001:8001"
+    depends_on:
+      - mongodb
