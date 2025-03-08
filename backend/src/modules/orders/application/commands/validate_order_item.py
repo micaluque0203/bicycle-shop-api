@@ -4,11 +4,9 @@ from core.application.commands import Command, CommandResult
 from core.domain.value_objects import PydanticObjectId
 from modules.orders.domain.value_objects import Configuration
 from modules.products.domain.entities import ConfigurationRule, Part
-from modules.products.domain.repositories import (
-    ConfigurationRuleRepository,
-    PartRepository,
-    ProductRepository,
-)
+from modules.products.domain.repositories import (ConfigurationRuleRepository,
+                                                  PartRepository,
+                                                  ProductRepository)
 
 
 class ValidateOrderItemCommand(Command):

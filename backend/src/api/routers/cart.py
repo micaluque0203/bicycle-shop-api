@@ -1,23 +1,17 @@
 from fastapi import APIRouter, Depends, HTTPException
 
 from api.dependencies.auth import current_active_user
-from api.infrastructure.client import (
-    get_orders_repository,
-    get_parts_repository,
-    get_products_repository,
-    get_rules_repository,
-)
-from api.schemas.orders import ValidateOrderItemRequest, ValidateOrderItemResponse
+from api.infrastructure.client import (get_orders_repository,
+                                       get_parts_repository,
+                                       get_products_repository,
+                                       get_rules_repository)
+from api.schemas.orders import (ValidateOrderItemRequest,
+                                ValidateOrderItemResponse)
 from core.domain.value_objects import PydanticObjectId
 from modules.orders.application.commands.create_order import (
-    CreateOrderCommand,
-    CreateOrderItemCommand,
-    create_order_command,
-)
+    CreateOrderCommand, CreateOrderItemCommand, create_order_command)
 from modules.orders.application.commands.validate_order_item import (
-    ValidateOrderItemCommand,
-    validate_order_item_command,
-)
+    ValidateOrderItemCommand, validate_order_item_command)
 from modules.orders.domain.aggregates import Order
 from modules.orders.domain.value_objects import Configuration
 

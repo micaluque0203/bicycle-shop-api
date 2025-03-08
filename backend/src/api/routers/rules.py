@@ -7,21 +7,13 @@ from api.infrastructure.client import get_rules_repository
 from api.schemas.rules import ConfigurationRuleResponse
 from core.domain.value_objects import PydanticObjectId
 from modules.products.application.command.create_rule import (
-    CreateConfigurationRuleCommand,
-    create_configuration_rule_command,
-)
+    CreateConfigurationRuleCommand, create_configuration_rule_command)
 from modules.products.application.command.delete_rule import (
-    DeleteConfigurationRuleCommand,
-    delete_configuration_rule_command,
-)
+    DeleteConfigurationRuleCommand, delete_configuration_rule_command)
 from modules.products.application.command.update_rule import (
-    UpdateConfigurationRuleCommand,
-    update_configuration_rule_command,
-)
+    UpdateConfigurationRuleCommand, update_configuration_rule_command)
 from modules.products.application.query.get_rules_listing import (
-    GetRulesListing,
-    get_configuration_rules_listing,
-)
+    GetRulesListing, get_configuration_rules_listing)
 
 router = APIRouter()
 

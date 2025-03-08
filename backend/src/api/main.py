@@ -11,7 +11,8 @@ from api.routers.cart import router as cart_router
 from api.routers.parts import router as parts_router
 from api.routers.products import router as products_router
 from api.routers.rules import router as rules_router
-from modules.iam.infrastructure.models import User, UserCreate, UserRead, UserUpdate
+from modules.iam.infrastructure.models import (User, UserCreate, UserRead,
+                                               UserUpdate)
 
 origins = ["http://localhost:5174", "http://127.0.0.1:3000", "http://0.0.0.0:5173"]
 

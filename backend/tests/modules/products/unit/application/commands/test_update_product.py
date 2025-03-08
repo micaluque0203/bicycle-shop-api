@@ -1,14 +1,17 @@
 from unittest.mock import AsyncMock
 
 import pytest
+from beanie import PydanticObjectId
 from bson import ObjectId
+from pydantic import BaseModel
 
 from src.modules.products.application.command.update_product import (
-    UpdateProductCommand,
-    update_product_command,
-)
-from src.modules.products.domain.aggregates import Product
+    UpdateProductCommand, update_product_command)
 from src.modules.products.domain.repositories import ProductRepository
+
+
+class FakeUpdateResponse(BaseModel):
+    upserted_id: PydanticObjectId
 
 
 @pytest.mark.asyncio
@@ -25,14 +28,7 @@ async def test_update_product_command():
 
     repository = AsyncMock(spec=ProductRepository)
     repository.update = AsyncMock()
-    expected_product = Product(
-        _id=expected_id,
-        name="Test Product",
-        category="Test Category",
-        part_ids=[],
-        configuration_rule_ids=[],
-    )
-    repository.update.return_value = expected_product
+    repository.update.return_value = FakeUpdateResponse(upserted_id=expected_id)
 
     result = await update_product_command(command, repository)
 

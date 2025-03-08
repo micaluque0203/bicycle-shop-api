@@ -7,21 +7,13 @@ from api.infrastructure.client import get_parts_repository
 from api.schemas.parts import PartResponse
 from core.domain.value_objects import PydanticObjectId
 from modules.products.application.command.create_part import (
-    CreatePartCommand,
-    create_part_command,
-)
+    CreatePartCommand, create_part_command)
 from modules.products.application.command.delete_part import (
-    DeletePartCommand,
-    delete_part_command,
-)
+    DeletePartCommand, delete_part_command)
 from modules.products.application.command.update_part import (
-    UpdatePartCommand,
-    update_part_command,
-)
+    UpdatePartCommand, update_part_command)
 from modules.products.application.query.get_parts_listing import (
-    GetPartListing,
-    get_part_listing,
-)
+    GetPartListing, get_part_listing)
 
 router = APIRouter()
 

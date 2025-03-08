@@ -4,9 +4,7 @@ import pytest
 from bson import ObjectId
 
 from src.modules.products.application.command.create_product import (
-    CreateProductCommand,
-    create_product_command,
-)
+    CreateProductCommand, create_product_command)
 from src.modules.products.domain.repositories import ProductRepository
 
 

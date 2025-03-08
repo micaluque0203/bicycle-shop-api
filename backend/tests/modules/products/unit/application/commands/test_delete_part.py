@@ -4,9 +4,7 @@ import pytest
 from bson import ObjectId
 
 from src.modules.products.application.command.delete_part import (
-    DeletePartCommand,
-    delete_part_command,
-)
+    DeletePartCommand, delete_part_command)
 from src.modules.products.domain.events import PartDeletedEvent
 from src.modules.products.domain.repositories import PartRepository
 

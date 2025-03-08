@@ -4,12 +4,11 @@ import pytest
 from bson import ObjectId
 
 from src.modules.products.application.command.update_part import (
-    UpdatePartCommand,
-    update_part_command,
-)
+    UpdatePartCommand, update_part_command)
 from src.modules.products.domain.entities import Part
 from src.modules.products.domain.repositories import PartRepository
-from src.modules.products.domain.value_objects import PartCategoryName, StockStatus
+from src.modules.products.domain.value_objects import (PartCategoryName,
+                                                       StockStatus)
 
 
 @pytest.mark.asyncio

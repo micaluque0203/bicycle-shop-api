@@ -1,10 +1,8 @@
 from core.application.querys import Query, QueryResult
 from core.domain.value_objects import PydanticObjectId
-from modules.products.domain.repositories import (
-    ConfigurationRuleRepository,
-    PartRepository,
-    ProductRepository,
-)
+from modules.products.domain.repositories import (ConfigurationRuleRepository,
+                                                  PartRepository,
+                                                  ProductRepository)
 
 
 class GetProductDetails(Query):

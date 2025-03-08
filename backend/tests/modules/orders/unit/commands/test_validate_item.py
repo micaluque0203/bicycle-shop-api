@@ -4,30 +4,18 @@ import pytest
 from bson import ObjectId
 
 from src.modules.orders.application.commands.validate_order_item import (
-    ValidateOrderItemCommand,
-    validate_order_item_command,
-)
+    ValidateOrderItemCommand, validate_order_item_command)
 from src.modules.orders.domain.repositories import OrderRepository
 from src.modules.products.domain.aggregates import Product
 from src.modules.products.domain.entities import ConfigurationRule, Part
 from src.modules.products.domain.repositories import (
-    ConfigurationRuleRepository,
-    PartRepository,
-    ProductRepository,
-)
-from src.modules.products.domain.value_objects import PartCategoryName, StockStatus
+    ConfigurationRuleRepository, PartRepository, ProductRepository)
+from src.modules.products.domain.value_objects import (PartCategoryName,
+                                                       StockStatus)
 
 
 @pytest.fixture
 def product_exists():
-    # product = Product(
-    #     id=ObjectId(),
-    #     name="Custom Bicycle",
-    #     category="Bikes",
-    #     part_ids=[ObjectId(), ObjectId()],
-    #     configuration_rule_ids=[ObjectId(), ObjectId()],
-    # )
-    # return product
     return {
         "id": ObjectId("67caa7d400be092083bf2e5c"),
         "events": [],
@@ -90,11 +78,11 @@ async def test_validate_order_item_command_is_valid_is_in_stock(
     rules_repository = AsyncMock(spec=ConfigurationRuleRepository)
     rules_repository.find_all_by_id = AsyncMock()
     rules_repository.find_all_by_id.return_value = [
-        {
-            "depends_on": PartCategoryName.FRAME,
-            "depends_value": "Full-suspension",
-            "forbidden_values": ["red"],
-        },
+        ConfigurationRule(
+            depends_on=PartCategoryName.FRAME,
+            depends_value="Full-suspension",
+            forbidden_values=["red"],
+        )
     ]
 
     result = await validate_order_item_command(
@@ -165,16 +153,16 @@ async def test_validate_order_item_invalid_configuration(
     rules_repository = AsyncMock(spec=ConfigurationRuleRepository)
     rules_repository.find_all_by_id = AsyncMock()
     rules_repository.find_all_by_id.return_value = [
-        {
-            "depends_on": PartCategoryName.WHEELS,
-            "depends_value": "mountain wheels",
-            "forbidden_values": ["diamond", "step-through"],
-        },
-        {
-            "depends_on": PartCategoryName.WHEELS,
-            "depends_value": "fat bike wheels",
-            "forbidden_values": ["red"],
-        },
+        ConfigurationRule(
+            depends_on=PartCategoryName.WHEELS,
+            depends_value="mountain wheels",
+            forbidden_values=["diamond", "step-through"],
+        ),
+        ConfigurationRule(
+            depends_on=PartCategoryName.WHEELS,
+            depends_value="fat bike wheels",
+            forbidden_values=["red"],
+        ),
     ]
 
     result = await validate_order_item_command(
@@ -224,16 +212,16 @@ async def test_validate_order_item_part_out_of_stock(product_exists):
     rules_repository = AsyncMock(spec=ConfigurationRuleRepository)
     rules_repository.find_all_by_id = AsyncMock()
     rules_repository.find_all_by_id.return_value = [
-        {
-            "depends_on": PartCategoryName.WHEELS,
-            "depends_value": "mountain wheels",
-            "forbidden_values": ["diamond", "step-through"],
-        },
-        {
-            "depends_on": PartCategoryName.WHEELS,
-            "depends_value": "fat bike wheels",
-            "forbidden_values": ["red"],
-        },
+        ConfigurationRule(
+            depends_on=PartCategoryName.WHEELS,
+            depends_value="mountain wheels",
+            forbidden_values=["diamond", "step-through"],
+        ),
+        ConfigurationRule(
+            depends_on=PartCategoryName.WHEELS,
+            depends_value="fat bike wheels",
+            forbidden_values=["red"],
+        ),
     ]
 
     result = await validate_order_item_command(

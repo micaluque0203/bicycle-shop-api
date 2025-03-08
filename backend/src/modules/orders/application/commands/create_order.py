@@ -5,11 +5,10 @@ from core.domain.value_objects import PydanticObjectId
 from modules.orders.domain.aggregates import Order
 from modules.orders.domain.events import OrderCreatedEvent
 from modules.orders.domain.repositories import OrderRepository
-from modules.orders.domain.value_objects import Configuration, OrderItem, OrderStatus
-from modules.products.domain.repositories import (
-    ConfigurationRuleRepository,
-    ProductRepository,
-)
+from modules.orders.domain.value_objects import (Configuration, OrderItem,
+                                                 OrderStatus)
+from modules.products.domain.repositories import (ConfigurationRuleRepository,
+                                                  ProductRepository)
 
 
 class CreateOrderItemCommand(Command):

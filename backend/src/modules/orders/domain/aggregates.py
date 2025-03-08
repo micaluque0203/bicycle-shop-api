@@ -2,7 +2,8 @@ from typing import List
 
 from core.domain.entities import Aggregate
 from core.domain.value_objects import PydanticObjectId
-from modules.orders.domain.value_objects import Configuration, OrderItem, OrderStatus
+from modules.orders.domain.value_objects import (Configuration, OrderItem,
+                                                 OrderStatus)
 from modules.products.domain.aggregates import Product
 from modules.products.domain.entities import ConfigurationRule, Part
 

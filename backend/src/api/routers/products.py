@@ -3,37 +3,22 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 
 from api.dependencies.auth import current_superuser
-from api.infrastructure.client import (
-    get_parts_repository,
-    get_products_repository,
-    get_rules_repository,
-)
-from api.schemas.products import (
-    ProductCreatedResponse,
-    ProductResponse,
-    UpdateProductRequest,
-)
+from api.infrastructure.client import (get_parts_repository,
+                                       get_products_repository,
+                                       get_rules_repository)
+from api.schemas.products import (ProductCreatedResponse, ProductResponse,
+                                  UpdateProductRequest)
 from core.domain.value_objects import PydanticObjectId
 from modules.products.application.command.create_product import (
-    CreateProductCommand,
-    create_product_command,
-)
+    CreateProductCommand, create_product_command)
 from modules.products.application.command.delete_product import (
-    DeleteProductCommand,
-    delete_product_command,
-)
+    DeleteProductCommand, delete_product_command)
 from modules.products.application.command.update_product import (
-    UpdateProductCommand,
-    update_product_command,
-)
+    UpdateProductCommand, update_product_command)
 from modules.products.application.query.get_product_details import (
-    GetProductDetails,
-    get_product_details,
-)
+    GetProductDetails, get_product_details)
 from modules.products.application.query.get_products_listing import (
-    GetProductListing,
-    get_product_listing,
-)
+    GetProductListing, get_product_listing)
 
 router = APIRouter()
 

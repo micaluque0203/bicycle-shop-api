@@ -4,10 +4,9 @@ import pytest
 from bson import ObjectId
 
 from src.modules.products.application.command.create_rule import (
-    CreateConfigurationRuleCommand,
-    create_configuration_rule_command,
-)
-from src.modules.products.domain.repositories import ConfigurationRuleRepository
+    CreateConfigurationRuleCommand, create_configuration_rule_command)
+from src.modules.products.domain.repositories import \
+    ConfigurationRuleRepository
 from src.modules.products.domain.value_objects import PartCategoryName
 
 

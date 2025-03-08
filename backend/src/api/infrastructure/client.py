@@ -3,12 +3,14 @@ from motor.motor_asyncio import AsyncIOMotorClient
 
 from api.settings import Settings
 from modules.iam.domain.entities import User
-from modules.orders.infrastructure.orders_repository import MongoDBOrdersRepository
-from modules.products.infrastructure.parts_repository import MongoDBPartsRepository
-from modules.products.infrastructure.product_repository import MongoDBProductRepository
-from modules.products.infrastructure.rules_repository import (
-    MongoDBConfigurationRulesRepository,
-)
+from modules.orders.infrastructure.orders_repository import \
+    MongoDBOrdersRepository
+from modules.products.infrastructure.parts_repository import \
+    MongoDBPartsRepository
+from modules.products.infrastructure.product_repository import \
+    MongoDBProductRepository
+from modules.products.infrastructure.rules_repository import \
+    MongoDBConfigurationRulesRepository
 
 
 class MongoDB:

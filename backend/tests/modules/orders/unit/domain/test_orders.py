@@ -4,7 +4,8 @@ from src.modules.orders.domain.aggregates import Order
 from src.modules.orders.domain.value_objects import Configuration, OrderStatus
 from src.modules.products.domain.aggregates import Configuration, Product
 from src.modules.products.domain.entities import ConfigurationRule, Part
-from src.modules.products.domain.value_objects import PartCategoryName, StockStatus
+from src.modules.products.domain.value_objects import (PartCategoryName,
+                                                       StockStatus)
 
 
 def test_dynamic_configuration_validation():
