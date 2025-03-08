@@ -3,9 +3,10 @@ import { useAdmin } from "../hooks/useAdmin.jsx";
 import AdminTabHeader from "./AdminTabHeader";
 import AdminTabTable from "./AdminTabTable";
 import AdminModal from "../components/AdminModal";
+import { deletePart, updatePart } from "../services.js";
 
 const PartsAdminTab = () => {
-  const categories = ["Frame", "Wheels", "Saddle", "Rim", "Pedals", "Chain"];
+  const categories = ["Frame", "Finish", "Wheels", "Rim color", "Chain"];
 
   const columns = [
     { Header: "Name", accessor: "name" },
@@ -64,9 +65,8 @@ const PartsAdminTab = () => {
     };
     try {
       if (isEdit) {
-        // Update product endpoint (if available)
-        // await updateProduct(payload);
-        // fetchProducts();
+        await updatePart(payload);
+        fetchParts();
       } else {
         await addPart(payload);
         fetchParts();
@@ -74,6 +74,15 @@ const PartsAdminTab = () => {
       closeModal();
     } catch (error) {
       console.error("Error submitting product:", error);
+    }
+  };
+
+  const onRemoveClick = async (part) => {
+    try {
+      await deletePart(part.id);
+      fetchParts();
+    } catch (error) {
+      console.error("Error deleting configuration option:", error);
     }
   };
 
@@ -98,6 +107,7 @@ const PartsAdminTab = () => {
         columns={columns}
         data={admin_dash.parts}
         onEditClick={openModal}
+        onRemoveClick={onRemoveClick}
       />
       <AdminModal
         isOpen={isOpen}

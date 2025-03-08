@@ -1,4 +1,3 @@
-import "./Products.css";
 import { AddToCartIcon, RemoveFromCartIcon } from "./Icons.jsx";
 import { useCart } from "../hooks/useCart.jsx";
 

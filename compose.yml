@@ -7,23 +7,38 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: marcus_business
     volumes:
-      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+      - ./backend/tools/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
     ports:
       - "27017:27017"
 
   fastapi:
     build:
       context: .
-      dockerfile: ./backend/src/api/Dockerfile
+      dockerfile: ./backend/Dockerfile
     container_name: fastapi-container
-    command: ["/api/entrypoint.sh"]
+    command: ["/backend/tools/entrypoint.sh"]
     volumes:
-      - ./backend/src/api:/api
-      - ./backend/pyproject.toml:/api/pyproject.toml
-      - ./backend/poetry.lock:/api/poetry.lock
-      - ./backend/README.md:/api/README.md
+      - ./backend:/backend
     ports:
       - "8001:8001"
     depends_on:
       - mongodb
+
+  web:
+    build:
+      context: .
+      dockerfile: ./frontend/Dockerfile
+    container_name: frontend-container
+    command: ["npm", "run", "dev", "--", "--host"]
+    volumes:
+      - ./frontend:/frontend
+      - node_modules:/frontend/node_modules
+    ports:
+      - "5173:5173"
+    depends_on:
+      - fastapi
+
+volumes:
+  node_modules:

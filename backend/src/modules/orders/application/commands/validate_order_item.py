@@ -2,9 +2,13 @@ from typing import List
 
 from core.application.commands import Command, CommandResult
 from core.domain.value_objects import PydanticObjectId
-from modules.orders.domain.value_objects import Configuration, OrderItem
-from modules.products.domain.entities import ConfigurationRule
-from modules.products.domain.repositories import ProductRepository
+from modules.orders.domain.value_objects import Configuration
+from modules.products.domain.entities import ConfigurationRule, Part
+from modules.products.domain.repositories import (
+    ConfigurationRuleRepository,
+    PartRepository,
+    ProductRepository,
+)
 
 
 class ValidateOrderItemCommand(Command):
@@ -13,19 +17,29 @@ class ValidateOrderItemCommand(Command):
 
 
 async def validate_order_item_command(
-    command: ValidateOrderItemCommand, product_repository: ProductRepository
+    command: ValidateOrderItemCommand,
+    product_repository: ProductRepository,
+    parts_repository: PartRepository,
+    rules_repository: ConfigurationRuleRepository,
 ) -> CommandResult:
     product = await product_repository.get_by_id(command.product_id)
     if not product:
         return CommandResult.failure(f"Product {command.product_id} not found")
 
-    if "configuration_rules" in product:
-        rules = [ConfigurationRule(**rule) for rule in product["configuration_rules"]]
+    config = Configuration(options=command.configuration)
 
-        config = Configuration(options=command.configuration)
-
-        if not config.is_valid(rules):
+    if "configuration_rule_ids" in product:
+        config_rules = await rules_repository.find_all_by_id(
+            filter={"$in": product["configuration_rule_ids"]}
+        )
+        if config.is_valid(config_rules) is False:
             return CommandResult.failure("Invalid configuration")
+
+    product_parts = await parts_repository.find_all_by_id(
+        filter={"$in": product["part_ids"]}
+    )
+    if not config.is_in_stock(product_parts):
+        return CommandResult.failure("Some parts are not in stock")
 
     return CommandResult.success(
         payload={"is_valid": True},

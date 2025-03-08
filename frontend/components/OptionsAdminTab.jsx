@@ -3,11 +3,23 @@ import { useAdmin } from "../hooks/useAdmin.jsx";
 import AdminTabHeader from "./AdminTabHeader";
 import AdminTabTable from "./AdminTabTable";
 import AdminModal from "../components/AdminModal";
+import { updateRule, deleteRule } from "../services.js";
 
 const OptionsAdminTab = () => {
-  const categories = ["Frame", "Wheels", "Saddle", "Rim", "Pedals", "Chain"];
+  const categories = ["Frame", "Finish", "Wheels", "Rim color", "Chain"]; // TODO: this should be fetched from the backend
 
-  const forbidden_values = ["diamond", "platinum", "gold", "silver", "bronze"];
+  const forbidden_values = [
+    "Diamond",
+    "Red",
+    "Black",
+    "Blue",
+    "Step-through",
+    "Single-speed chain",
+    "8-speed chain",
+    "Road wheels",
+    "Mountain wheels",
+    "Fat bike wheels",
+  ]; // TODO: this should be fetched from the backend
 
   const columns = [
     { Header: "Depends on", accessor: "depends_on" },
@@ -32,6 +44,7 @@ const OptionsAdminTab = () => {
     setIsEdit(rule !== null);
     setCurrentOption(
       rule || {
+        rule_id: "",
         depends_on: categories[0],
         depends_value: "",
         forbidden_values: [],
@@ -69,9 +82,8 @@ const OptionsAdminTab = () => {
     };
     try {
       if (isEdit) {
-        // Update product endpoint (if available)
-        // await updateProduct(payload);
-        // fetchProducts();
+        await updateRule({ rule_id: currentOption.id, ...payload });
+        fetchProducts();
       } else {
         await addRule(payload);
         fetchRules();
@@ -79,6 +91,15 @@ const OptionsAdminTab = () => {
       closeModal();
     } catch (error) {
       console.error("Error submitting option:", error);
+    }
+  };
+
+  const onRemoveClick = async (rule) => {
+    try {
+      await deleteRule(rule.id);
+      fetchRules();
+    } catch (error) {
+      console.error("Error deleting configuration option:", error);
     }
   };
 
@@ -103,6 +124,7 @@ const OptionsAdminTab = () => {
         columns={columns}
         data={admin_dash.configurationRules}
         onEditClick={openModal}
+        onRemoveClick={onRemoveClick}
       />
       <AdminModal
         isOpen={isOpen}

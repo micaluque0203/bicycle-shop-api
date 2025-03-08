@@ -1,0 +1,40 @@
+[project]
+name = "bicycle-shop-api"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Micaela Luque",email = "micaluque0203@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.9,<4.0"
+dependencies = [
+    "fastapi (>=0.115.8,<0.116.0)",
+    "motor (>=3.7.0,<4.0.0)",
+    "pymongo (>=4.11.1,<5.0.0)",
+    "fastapi-users (>=14.0.1,<15.0.0)",
+    "pydantic (>=2.10.6,<3.0.0)",
+    "uvicorn (>=0.34.0,<0.35.0)",
+    "httpx (>=0.28.1,<0.29.0)",
+    "beanie (>=1.29.0,<2.0.0)",
+    "fastapi-users-db-beanie (>=4.0.0,<5.0.0)",
+    "pytest-mock (>=3.14.0,<4.0.0)",
+    "pytest-asyncio (>=0.25.3,<0.26.0)",
+    "passlib[bcrypt] (>=1.7.4,<2.0.0)",
+    
+]
+
+[tool.poetry]
+package-mode = false
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.4"
+pytest-asyncio = "^0.25.3"
+black = "^25.1.0"
+isort = "^6.0.1"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"

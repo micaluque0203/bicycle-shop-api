@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:8001",
+  baseURL: "http://0.0.0.0:8001",
   withCredentials: true,
 });
 
@@ -97,14 +97,20 @@ export const createRule = async (rule) => {
   return response.data;
 };
 
-export const validateOrderItem = async (configuration, product_id) => {
-  // configuration, product_id
-  const response = await api.post(
-    "/validate-order-item",
-    configuration,
-    product_id
-  );
-  return response.data;
+export const validateOrderItem = async (configuration) => {
+  console.log("validateOrderItem", configuration);
+  const response = await api.post("/validate-order-item", configuration);
+  console.log("validateOrderItem response", response.data);
+  if (response.status === 400) {
+    alert("Invalid configuration");
+    return { is_valid: false };
+  }
+  if (response.status === 200) {
+    return response.data;
+  } else {
+    alert("Invalid configuration");
+    throw new Error(`Invalid configuration`);
+  }
 };
 
 export const deleteProduct = async (productId) => {
@@ -112,7 +118,27 @@ export const deleteProduct = async (productId) => {
   return response.data;
 };
 
-export const updateProductParts = async (productId, parts) => {
-  const response = await api.put(`/admin/products/${productId}/parts`, parts);
+export const deletePart = async (partId) => {
+  const response = await api.delete(`/admin/parts/${partId}`);
+  return response.data;
+};
+
+export const updatePart = async (partId, parts) => {
+  const response = await api.put(`/admin/parts/${partId}`, parts);
+  return response.data;
+};
+
+export const updateProduct = async (productId, product) => {
+  const response = await api.put(`/admin/products/${productId}`, product);
+  return response.data;
+};
+
+export const deleteRule = async (ruleId) => {
+  const response = await api.delete(`/admin/configuration-rules/${ruleId}`);
+  return response.data;
+};
+
+export const updateRule = async (ruleId, rule) => {
+  const response = await api.put(`/admin/configuration-rules/${ruleId}`, rule);
   return response.data;
 };

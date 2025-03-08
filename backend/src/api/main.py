@@ -1,19 +1,19 @@
 import asyncio
 from contextlib import asynccontextmanager
 
+from beanie import init_beanie
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from api.dependencies.auth import auth_backend, fastapi_users
-from api.infrastructure.client import mongodb_instance
+from api.infrastructure.client import get_mongodb, mongodb_instance
 from api.routers.cart import router as cart_router
 from api.routers.parts import router as parts_router
 from api.routers.products import router as products_router
 from api.routers.rules import router as rules_router
-from modules.iam.infrastructure.models import (User, UserCreate, UserRead,
-                                               UserUpdate)
+from modules.iam.infrastructure.models import User, UserCreate, UserRead, UserUpdate
 
-origins = ["http://localhost:5174", "http://127.0.0.1:3000"]
+origins = ["http://localhost:5174", "http://127.0.0.1:3000", "http://0.0.0.0:5173"]
 
 
 @asynccontextmanager

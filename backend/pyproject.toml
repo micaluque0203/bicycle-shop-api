@@ -23,9 +23,6 @@ dependencies = [
     
 ]
 
-[tool.poetry]
-packages = [{include = "api", from = "src"}]
-
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.4"
@@ -39,4 +36,3 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
-trio_mode = "true"

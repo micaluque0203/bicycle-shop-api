@@ -1,6 +1,6 @@
 import React, { useId } from "react";
 
-const AdminTabTable = ({ columns, data, onEditClick }) => (
+const AdminTabTable = ({ columns, data, onEditClick, onRemoveClick }) => (
   <div className="mt-8 flow-root">
     <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
       <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
@@ -34,7 +34,7 @@ const AdminTabTable = ({ columns, data, onEditClick }) => (
                   {columns.map((column) => (
                     <td
                       key={column.accessor}
-                      className="px-3 py-4 text-sm whitespace-nowrap text-gray-500"
+                      className="px-3 py-4 text-sm text-gray-500"
                     >
                       {typeof column.accessor === "function"
                         ? column.accessor(row)
@@ -48,6 +48,15 @@ const AdminTabTable = ({ columns, data, onEditClick }) => (
                     >
                       Edit
                       <span className="sr-only">, {row.id}</span>
+                    </button>
+                  </td>
+                  <td className="relative py-4 px-3 text-right text-sm font-medium whitespace-nowrap">
+                    <button
+                      onClick={() => onRemoveClick(row)}
+                      className="text-red-600 hover:text-red-900"
+                    >
+                      Remove
+                      <span className="sr-only">{row.id}</span>
                     </button>
                   </td>
                 </tr>

@@ -5,10 +5,11 @@ from core.domain.value_objects import PydanticObjectId
 from modules.orders.domain.aggregates import Order
 from modules.orders.domain.events import OrderCreatedEvent
 from modules.orders.domain.repositories import OrderRepository
-from modules.orders.domain.value_objects import (Configuration, OrderItem,
-                                                 OrderStatus)
-from modules.products.domain.repositories import (ConfigurationRuleRepository,
-                                                  ProductRepository)
+from modules.orders.domain.value_objects import Configuration, OrderItem, OrderStatus
+from modules.products.domain.repositories import (
+    ConfigurationRuleRepository,
+    ProductRepository,
+)
 
 
 class CreateOrderItemCommand(Command):
@@ -64,7 +65,7 @@ async def create_order_command(
         new_order_items = [
             OrderItem(
                 product_id=item.product_id,
-                configuration=item.configuration,  # Use the configuration directly
+                configuration=item.configuration,
             )
             for item in command.order_items
         ]
@@ -76,7 +77,6 @@ async def create_order_command(
                 event=None,
             )
 
-        # Update the existing order if it has changed
         user_order.order_items = new_order_items
         order_created = await repository.update(user_order)
         if order_created:

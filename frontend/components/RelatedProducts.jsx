@@ -1,5 +1,3 @@
-import "./Products.css";
-import { products } from "../mocks/products.json";
 import { useEffect, useState } from "react";
 import { fetchProducts } from "../services";
 const RelatedProducts = () => {
@@ -30,7 +28,7 @@ const RelatedProducts = () => {
 
       <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
         {products.slice(0, 4).map((relatedProduct, index) => (
-          <div key={relatedProduct.id} className="group relative">
+          <div key={relatedProduct.product_id} className="group relative">
             <img
               alt={relatedProduct.name}
               src={imgPlaceholder[index]}
@@ -39,7 +37,7 @@ const RelatedProducts = () => {
             <div className="mt-4 flex justify-between">
               <div>
                 <h3 className="text-sm text-gray-800">
-                  <a href={"products/" + relatedProduct.id}>
+                  <a href={`/products/${relatedProduct.product_id}`}>
                     <span aria-hidden="true" className="absolute inset-0" />
                     {relatedProduct.name}
                   </a>

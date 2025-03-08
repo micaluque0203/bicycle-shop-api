@@ -1,24 +1,27 @@
-import "./Cart.css";
 import { useId } from "react";
-import { CartIcon, ClearCartIcon } from "./Icons.jsx";
 import { useCart } from "../hooks/useCart.jsx";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import { ShoppingBagIcon } from "@heroicons/react/24/outline";
 import CartItem from "./CartItem.jsx";
 
 export function Cart() {
+  const cartId = useId();
   const { cart } = useCart();
-
+  console.log(cart);
   return (
     <>
       <Popover className="ml-4 flow-root text-sm lg:relative lg:ml-8">
-        <PopoverButton className="group -m-2 flex items-center p-2">
+        <PopoverButton
+          className="group -m-2 flex items-center p-2"
+          htmlFor={cartId}
+        >
+          <input id={cartId} type="checkbox" hidden />
           <ShoppingBagIcon
             aria-hidden="true"
             className="size-6 shrink-0 text-gray-400 group-hover:text-gray-500"
           />
           <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
-            {cart.length}
+            {cart.items.length}
           </span>
           <span className="sr-only">items in cart, view bag</span>
         </PopoverButton>
@@ -36,12 +39,11 @@ export function Cart() {
             )}
 
             <ul role="list" className="divide-y divide-gray-200">
-              {cart.map((product_cart) => {
-                const id = useId();
+              {cart.items.map((product_cart) => {
                 return (
                   <CartItem
-                    key={id}
-                    id={product_cart.product.product_id}
+                    key={product_cart.product_id}
+                    id={product_cart.product_id}
                     name={product_cart.product.name}
                     category={product_cart.product.category}
                     quantity={product_cart.quantity}
@@ -50,14 +52,6 @@ export function Cart() {
                 );
               })}
             </ul>
-
-            <button
-              type="submit"
-              className="w-full rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-xs hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-50 focus:outline-hidden"
-            >
-              Checkout
-            </button>
-
             {(cart.length === 0 && (
               <p className="mt-6 text-center">
                 <a

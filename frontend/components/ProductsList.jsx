@@ -28,6 +28,7 @@ export default function ProductsList({ products }) {
         <div className="mt-6 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:grid-rows-2 sm:gap-x-6 lg:gap-8">
           {topProducts.map((product, index) => (
             <div
+              key={product.product_id}
               className={`group relative aspect-2/1 overflow-hidden rounded-lg sm:aspect-auto ${
                 index === 0 ? "sm:row-span-2 sm:aspect-square" : ""
               }`}

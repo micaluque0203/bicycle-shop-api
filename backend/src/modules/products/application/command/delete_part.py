@@ -15,4 +15,5 @@ async def delete_part_command(
     deleted_count = await repository.remove(command.part_id)
     if deleted_count == 0:
         return CommandResult.error(f"Part with id {command.part_id} not found")
-    return CommandResult.success(event=PartDeletedEvent(part_id=command.part_id))
+    event = PartDeletedEvent(part_id=command.part_id)
+    return CommandResult.success(event=event)

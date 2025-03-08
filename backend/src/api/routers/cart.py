@@ -1,16 +1,23 @@
 from fastapi import APIRouter, Depends, HTTPException
 
 from api.dependencies.auth import current_active_user
-from api.infrastructure.client import (get_orders_repository,
-                                       get_products_repository,
-                                       get_rules_repository)
-from api.schemas.orders import (ValidateOrderItemRequest,
-                                ValidateOrderItemResponse)
+from api.infrastructure.client import (
+    get_orders_repository,
+    get_parts_repository,
+    get_products_repository,
+    get_rules_repository,
+)
+from api.schemas.orders import ValidateOrderItemRequest, ValidateOrderItemResponse
 from core.domain.value_objects import PydanticObjectId
 from modules.orders.application.commands.create_order import (
-    CreateOrderCommand, CreateOrderItemCommand, create_order_command)
+    CreateOrderCommand,
+    CreateOrderItemCommand,
+    create_order_command,
+)
 from modules.orders.application.commands.validate_order_item import (
-    ValidateOrderItemCommand, validate_order_item_command)
+    ValidateOrderItemCommand,
+    validate_order_item_command,
+)
 from modules.orders.domain.aggregates import Order
 from modules.orders.domain.value_objects import Configuration
 
@@ -47,18 +54,22 @@ async def add_to_cart(
 async def validate_order_item(
     request: ValidateOrderItemRequest,
     product_repository=Depends(get_products_repository),
+    parts_repository=Depends(get_parts_repository),
+    rules_repository=Depends(get_rules_repository),
 ):
     response = await validate_order_item_command(
         ValidateOrderItemCommand(
             product_id=request.product_id, configuration=request.configuration
         ),
         product_repository,
+        parts_repository,
+        rules_repository,
     )
 
-    if response.is_failure:
-        raise HTTPException(status_code=400, detail=response.errors)
+    if response.has_errors():
+        raise HTTPException(status_code=400, detail=response.errors[0][0])
 
-    return ValidateOrderItemResponse(valid=True)
+    return ValidateOrderItemResponse(is_valid=True)
 
 
 # @router.get("/cart", response_model=Order, dependencies=[Depends(current_active_user)])

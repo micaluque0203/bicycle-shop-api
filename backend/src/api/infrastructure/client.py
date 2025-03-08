@@ -1,16 +1,14 @@
 from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from api.settings import settings
+from api.settings import Settings
 from modules.iam.domain.entities import User
-from modules.orders.infrastructure.orders_repository import \
-    MongoDBOrdersRepository
-from modules.products.infrastructure.parts_repository import \
-    MongoDBPartsRepository
-from modules.products.infrastructure.product_repository import \
-    MongoDBProductRepository
-from modules.products.infrastructure.rules_repository import \
-    MongoDBConfigurationRulesRepository
+from modules.orders.infrastructure.orders_repository import MongoDBOrdersRepository
+from modules.products.infrastructure.parts_repository import MongoDBPartsRepository
+from modules.products.infrastructure.product_repository import MongoDBProductRepository
+from modules.products.infrastructure.rules_repository import (
+    MongoDBConfigurationRulesRepository,
+)
 
 
 class MongoDB:
@@ -19,16 +17,21 @@ class MongoDB:
         self.db = None
 
     async def __aenter__(self):
-        self.client = AsyncIOMotorClient(settings.mongodb_url)
-        self.db = self.client[settings.database_name]
-        await self.init_db()
+        self.settings = Settings()
+        self.client = AsyncIOMotorClient(self.settings.mongodb_url)
+        self.db = self.client[self.settings.database_name]
+        ## await self.init_db()
         return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         self.client.close()
 
     async def init_db(self):
-        await init_beanie(database=self.db, document_models=[User])
+        if self.db is not None:
+
+            await init_beanie(database=self.db, document_models=[User])
+        else:
+            raise Exception("Database is not initialized")
 
     async def get_database(self):
         if self.db is None:

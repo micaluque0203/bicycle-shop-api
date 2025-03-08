@@ -7,7 +7,6 @@ class PartCategoryName(str, Enum):
     WHEELS = "Wheels"
     RIM_COLOR = "Rim color"
     CHAIN = "Chain"
-    STRING = "string"
 
 
 class StockStatus(str, Enum):

@@ -1,5 +1,5 @@
-import { useState, useEffect, Fragment } from "react";
-import { fetchProducts, createProduct } from "../services";
+import { useState, useEffect } from "react";
+import { deleteProduct, createProduct, updateProduct } from "../services";
 import AdminTabHeader from "./AdminTabHeader";
 import AdminTabTable from "./AdminTabTable";
 import { useAdmin } from "../hooks/useAdmin.jsx";
@@ -28,7 +28,17 @@ const ProductsAdminTab = () => {
     fetchData();
   }, [admin_dash.products]);
 
+  const onRemoveClick = async (product) => {
+    try {
+      await deleteProduct(product.product_id);
+      fetchProducts();
+    } catch (error) {
+      console.error("Error deleting products:", error);
+    }
+  };
+
   const openModal = (product = null) => {
+    console.log(product);
     setIsEdit(product !== null);
     setCurrentProduct(
       product || {
@@ -60,7 +70,7 @@ const ProductsAdminTab = () => {
       (partName) =>
         admin_dash.parts.find(
           (part) => `${part.name} ${part.part_type}` === partName
-        )._id
+        ).id
     );
     setCurrentProduct({ ...currentProduct, parts: selectedPartIds });
   };
@@ -70,7 +80,7 @@ const ProductsAdminTab = () => {
       (ruleName) =>
         admin_dash.configurationRules.find(
           (rule) => `${rule.depends_on}: ${rule.depends_value}` === ruleName
-        )._id
+        ).id
     );
     setCurrentProduct({
       ...currentProduct,
@@ -88,9 +98,8 @@ const ProductsAdminTab = () => {
     };
     try {
       if (isEdit) {
-        // Update product endpoint (if available)
-        // await updateProduct(payload);
-        // fetchProducts();
+        await updateProduct(currentProduct.product_id, payload);
+        fetchProducts();
       } else {
         await createProduct(payload);
         fetchProducts();
@@ -131,6 +140,7 @@ const ProductsAdminTab = () => {
         columns={columns}
         data={admin_dash.products}
         onEditClick={openModal}
+        onRemoveClick={onRemoveClick}
       />
       <AdminModal
         isOpen={isOpen}

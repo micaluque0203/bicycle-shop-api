@@ -1,26 +1,30 @@
-from typing import Any, Coroutine, Optional
+import contextlib
 
 from beanie import PydanticObjectId
-from bson import ObjectId
-from fastapi import Depends, Request
-from fastapi_users import BaseUserManager, FastAPIUsers
-from fastapi_users.authentication import (AuthenticationBackend,
-                                          BearerTransport, JWTStrategy)
+from fastapi import Depends
+from fastapi_users import FastAPIUsers
+from fastapi_users.authentication import (
+    AuthenticationBackend,
+    BearerTransport,
+    JWTStrategy,
+)
 from fastapi_users_db_beanie import BeanieUserDatabase
 
-from api.infrastructure.client import get_mongodb
-from api.security import get_password_hash, verify_password
-from api.settings import settings
+from api.settings import Settings
 from modules.iam.domain.entities import User
+from modules.iam.infrastructure.user_repository import UserManager
+
+settings = Settings()
 
 
+@contextlib.asynccontextmanager
 async def get_user_db():
-    async for db in get_mongodb():
-        yield BeanieUserDatabase(User)
+    yield BeanieUserDatabase(User)
 
 
-async def get_user_manager(user_db=Depends(get_user_db)):
-    yield UserManager(user_db)
+async def get_user_manager():
+    async with get_user_db() as user_db:
+        yield UserManager(user_db)
 
 
 def get_jwt_strategy() -> JWTStrategy:
@@ -40,14 +44,5 @@ auth_backend = AuthenticationBackend(
 fastapi_users = FastAPIUsers[User, PydanticObjectId](get_user_manager, [auth_backend])
 
 
-def get_current_user():
-    return fastapi_users.current_user(active=True)
-
-
-def get_current_superuser():
-    user = fastapi_users.current_user(active=True, superuser=True)
-    return user
-
-
-current_superuser = get_current_superuser()
-current_active_user = get_current_user()
+current_superuser = fastapi_users.current_user(active=True, superuser=True)
+current_active_user = fastapi_users.current_user(active=True)

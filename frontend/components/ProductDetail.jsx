@@ -3,6 +3,7 @@ import { fetchProduct } from "../services";
 import { Radio, RadioGroup, Listbox } from "@headlessui/react";
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/20/solid";
 import { useParams } from "react-router-dom";
+import { XCircleIcon } from "@heroicons/react/20/solid";
 import { useCart } from "../hooks/useCart.jsx";
 
 const ProductDetail = () => {
@@ -10,8 +11,9 @@ const ProductDetail = () => {
   const [product, setProduct] = useState(null);
   const [configuration, setConfiguration] = useState({});
   const [selectedParts, setSelectedParts] = useState({});
+  const [isInvalid, setIsInvalid] = useState(false);
 
-  const { addToCart } = useCart();
+  const { cart, addToCart } = useCart();
 
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -35,15 +37,14 @@ const ProductDetail = () => {
       ([key, value]) => ({ [key]: value })
     );
 
-    try {
-      await addToCart({
-        product,
-        productId,
-        configuration: formattedConfiguration,
-      });
-      alert("Added to cart");
-    } catch (error) {
-      alert(error.message);
+    const prevItems = cart.items.length;
+    console.log("prevItems", prevItems);
+    setIsInvalid(false);
+    await addToCart(productId, formattedConfiguration, product);
+    console.log("prevItems2", cart.items.length);
+    console.log("cart", cart.error);
+    if (prevItems === cart.items.length) {
+      setIsInvalid(true);
     }
   };
 
@@ -121,7 +122,7 @@ const ProductDetail = () => {
                       className="mt-2"
                     >
                       <RadioGroup
-                        value={configuration[partType]}
+                        value={configuration[partType] || ""}
                         onChange={(partName) =>
                           handleOptionChange(partType, partName)
                         }
@@ -130,7 +131,7 @@ const ProductDetail = () => {
                         {availablePartsByType[partType].map((part) => (
                           <Radio
                             key={part._id}
-                            value={part.name}
+                            value={part.name || ""}
                             disabled={part.stock_status !== "available"}
                             className={classNames(
                               part.stock_status === "available"
@@ -155,7 +156,7 @@ const ProductDetail = () => {
                     </fieldset>
                   ) : (
                     <Listbox
-                      value={configuration[partType]}
+                      value={configuration[partType] || ""}
                       onChange={(partName) =>
                         handleOptionChange(partType, partName)
                       }
@@ -176,7 +177,7 @@ const ProductDetail = () => {
                           {availablePartsByType[partType].map((part) => (
                             <Listbox.Option
                               key={part._id}
-                              value={part.name}
+                              value={part.name || ""}
                               disabled={part.stock_status !== "available"}
                               className={({ active }) =>
                                 classNames(
@@ -217,6 +218,23 @@ const ProductDetail = () => {
                   )}
                 </div>
               ))}
+              {isInvalid && (
+                <div className="rounded-md bg-red-50 p-4 mt-2">
+                  <div className="flex">
+                    <div className="shrink-0">
+                      <XCircleIcon
+                        aria-hidden="true"
+                        className="size-5 text-red-400"
+                      />
+                    </div>
+                    <div className="ml-3">
+                      <h3 className="text-sm font-medium text-red-800">
+                        Invalid Configuration
+                      </h3>
+                    </div>
+                  </div>
+                </div>
+              )}
               <button
                 type="submit"
                 className={classNames(

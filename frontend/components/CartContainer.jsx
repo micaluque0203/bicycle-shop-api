@@ -6,11 +6,11 @@ import {
   XMarkIcon as XMarkIconMini,
 } from "@heroicons/react/20/solid";
 const CartContainer = () => {
-  const { cart, removeFromCart } = useCart();
+  const { cart, removeFromCart, clearCart } = useCart();
 
   return (
     <>
-      {(cart.length > 0 && (
+      {(cart.items.length > 0 && (
         <form className="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
           <section aria-labelledby="cart-heading" className="lg:col-span-7">
             <h2 id="cart-heading" className="sr-only">
@@ -20,7 +20,7 @@ const CartContainer = () => {
               role="list"
               className="divide-y divide-gray-200 border-t border-b border-gray-200"
             >
-              {cart.map((product_cart) => {
+              {cart.items.map((product_cart) => {
                 const id = useId();
                 return (
                   <li key={id} className="flex py-6 sm:py-10">
@@ -37,7 +37,7 @@ const CartContainer = () => {
                           <div className="flex justify-between">
                             <h3 className="text-sm">
                               <a
-                                href={`/product/${product_cart.product.product_id}`}
+                                href={`/products/${product_cart.product.product_id}`}
                                 className="font-medium text-gray-700 hover:text-gray-800"
                               >
                                 {product_cart.product.name}
@@ -48,28 +48,26 @@ const CartContainer = () => {
                             {product_cart.product.category} - Quantity{" "}
                             {product_cart.quantity}
                           </p>
-                          <p>
-                            <div>
-                              <ul className="text-gray-500 text-sm mt-1">
-                                {product_cart.configuration.map(
-                                  (item, index) => {
-                                    const key = Object.keys(item)[0];
-                                    const value = item[key];
-                                    return (
-                                      <li key={index}>
-                                        {" "}
-                                        {key} | {value}{" "}
-                                      </li>
-                                    );
-                                  }
-                                )}
-                              </ul>
-                            </div>
-                          </p>
+                          <div>
+                            <ul className="text-gray-500 text-sm mt-1">
+                              {product_cart.configuration.map((item, index) => {
+                                const key = Object.keys(item)[0];
+                                const value = item[key];
+                                return (
+                                  <li key={index}>
+                                    {" "}
+                                    {key} | {value}{" "}
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                          </div>
                           <div className="absolute top-0 right-0">
                             <button
                               type="button"
-                              onClick={() => removeFromCart({ product_cart })}
+                              onClick={() =>
+                                removeFromCart(product_cart.product)
+                              }
                               className="-m-2 inline-flex p-2 text-gray-400 hover:text-gray-500"
                             >
                               <span className="sr-only">Remove</span>

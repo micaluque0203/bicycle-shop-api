@@ -30,5 +30,5 @@ class GenericRepository(Generic[EntityId, T], metaclass=abc.ABCMeta):
         raise NotImplementedError()
 
     @abc.abstractmethod
-    def update(self, entity: T) -> list[T]:
+    def update(self, entity: T) -> T:
         raise NotImplementedError()

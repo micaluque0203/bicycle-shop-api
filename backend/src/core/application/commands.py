@@ -9,8 +9,7 @@ from pydantic import BaseModel
 
 class DomainEvent(BaseModel):
     """
-    Domain events are used to communicate between aggregates within a single transaction boundary via in-memory queue.
-    Domain events are synchronous in nature.
+    Represents a domain event.
     """
 
     def __next__(self):
@@ -18,7 +17,11 @@ class DomainEvent(BaseModel):
 
 
 class Command(BaseModel):
-    """Abstract base class for all commands"""
+    """
+    Base class for all commands in the application.
+    """
+
+    pass
 
 
 @dataclass
@@ -39,7 +42,6 @@ class CommandResult:
 
     @classmethod
     def failure(cls, message="Failure", exception=None) -> "CommandResult":
-        """Creates a failed result"""
         exception_info = sys.exc_info()
         result = cls()
         result.add_error(message, exception, exception_info)
@@ -49,7 +51,6 @@ class CommandResult:
     def success(
         cls, entity_id=None, payload=None, event=None, events=None
     ) -> "CommandResult":
-        """Creates a successful result"""
         if events is None:
             events = []
         if event:

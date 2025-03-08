@@ -1,6 +1,11 @@
 import React, { Fragment } from "react";
-import { Dialog, Transition, Listbox } from "@headlessui/react";
-import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import {
+  DialogPanel,
+  TransitionChild,
+  Dialog,
+  DialogTitle,
+  Transition,
+} from "@headlessui/react";
 import MultiSelectDropdown from "./AdminMultiSelectDropdown.jsx";
 import Dropdown from "./AdminDropdown.jsx";
 
@@ -26,7 +31,7 @@ const AdminModal = ({
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={onClose}>
-        <Transition.Child
+        <TransitionChild
           as={Fragment}
           enter="ease-out duration-300"
           enterFrom="opacity-0"
@@ -36,11 +41,11 @@ const AdminModal = ({
           leaveTo="opacity-0"
         >
           <div className="fixed inset-0 bg-black bg-opacity-25" />
-        </Transition.Child>
+        </TransitionChild>
 
         <div className="fixed inset-0 overflow-y-auto">
           <div className="flex min-h-full items-center justify-center p-4 text-center">
-            <Transition.Child
+            <TransitionChild
               as={Fragment}
               enter="ease-out duration-300"
               enterFrom="opacity-0 scale-95"
@@ -49,13 +54,13 @@ const AdminModal = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                <Dialog.Title
+              <DialogPanel className="w-full max-w-md transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <DialogTitle
                   as="h3"
                   className="text-lg font-medium leading-6 text-gray-900"
                 >
                   {isEdit ? `Edit ${entity}` : `Add ${entity}`}
-                </Dialog.Title>
+                </DialogTitle>
                 <form onSubmit={handleSubmit}>
                   {categories && "Rule" === entity && (
                     <Dropdown
@@ -143,8 +148,8 @@ const AdminModal = ({
                     </button>
                   </div>
                 </form>
-              </Dialog.Panel>
-            </Transition.Child>
+              </DialogPanel>
+            </TransitionChild>
           </div>
         </div>
       </Dialog>

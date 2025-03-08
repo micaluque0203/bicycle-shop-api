@@ -4,11 +4,11 @@ from core.application.commands import Command, CommandResult
 from modules.products.domain.entities import ConfigurationRule
 from modules.products.domain.events import ConfigurationRuleCreatedEvent
 from modules.products.domain.repositories import PartRepository
+from modules.products.domain.value_objects import PartCategoryName
 
 
-@dataclass
 class CreateConfigurationRuleCommand(Command):
-    depends_on: str
+    depends_on: PartCategoryName
     depends_value: str
     forbidden_values: list[str]
 
@@ -23,5 +23,7 @@ async def create_configuration_rule_command(
         forbidden_values=command.forbidden_values,
     )
 
-    await repository.add(rule)
-    return CommandResult.success(event=ConfigurationRuleCreatedEvent(rule_id=rule.id))
+    created_rule = await repository.add(rule)
+    return CommandResult.success(
+        event=ConfigurationRuleCreatedEvent(rule_id=created_rule)
+    )

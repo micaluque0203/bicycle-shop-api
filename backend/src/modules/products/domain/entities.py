@@ -5,7 +5,7 @@ from modules.products.domain.value_objects import PartCategoryName, StockStatus
 
 
 class ConfigurationRule(Entity):
-    depends_on: str
+    depends_on: PartCategoryName
     depends_value: str
     forbidden_values: List[str]
 

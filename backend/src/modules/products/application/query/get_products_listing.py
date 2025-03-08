@@ -3,9 +3,11 @@ from typing import List
 from core.application.querys import Query, QueryResult
 from core.domain.value_objects import PydanticObjectId
 from modules.products.domain.aggregates import Product
-from modules.products.domain.repositories import (ConfigurationRuleRepository,
-                                                  PartRepository,
-                                                  ProductRepository)
+from modules.products.domain.repositories import (
+    ConfigurationRuleRepository,
+    PartRepository,
+    ProductRepository,
+)
 
 
 class GetProductListing(Query):
@@ -24,18 +26,17 @@ async def get_product_listing(
     product_listings = []
 
     for product in products:
-        parts = await parts_repository.find_all_by_id({"$in": product["part_ids"]})
+        parts = await parts_repository.find_all_by_id({"$in": product.part_ids})
 
         configuration_rules = await rules_repository.find_all_by_id(
-            {"$in": product["configuration_rule_ids"]}
+            {"$in": product.configuration_rule_ids}
         )
-
         product_listing = {
-            "product_id": product["_id"],
-            "category": product["category"],
-            "name": product["name"],
-            "available_parts": parts,
-            "configuration_rules": configuration_rules,
+            "product_id": product.id,
+            "category": product.category,
+            "name": product.name,
+            "available_parts": [part.model_dump() for part in parts],
+            "configuration_rules": [rule.model_dump() for rule in configuration_rules],
         }
         product_listings.append(product_listing)
 

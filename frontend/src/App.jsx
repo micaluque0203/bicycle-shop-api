@@ -1,12 +1,9 @@
-import React, { useContext, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import { Home } from "../pages/Home.jsx";
 import { ProductPage } from "../pages/ProductPage.jsx";
 import { AdminPage } from "../pages/AdminPage.jsx";
 import { CartPage } from "../pages/CartPage.jsx";
-import ManagePartsPage from "../pages/ManagePartsPage.jsx";
-import { NavBar } from "../components/NavBar.jsx";
 import Login from "../pages/Login.jsx";
 import { Header } from "../components/Header";
 import Register from "../pages/Register.jsx";
@@ -25,10 +22,6 @@ function App() {
             <Route path="/products" element={<ProductPage />} />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/admin" element={<AdminPage />} />
-            <Route
-              path="/admin/products/:productId/parts"
-              element={<ManagePartsPage />}
-            />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
           </Routes>
