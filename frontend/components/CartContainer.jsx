@@ -6,7 +6,7 @@ import {
   XMarkIcon as XMarkIconMini,
 } from "@heroicons/react/20/solid";
 const CartContainer = () => {
-  const { cart, removeFromCart, clearCart } = useCart();
+  const { cart, removeFromCart } = useCart();
 
   return (
     <>
@@ -95,7 +95,7 @@ const CartContainer = () => {
               id="summary-heading"
               className="text-lg font-medium text-gray-900"
             >
-              Order summary
+              Order summary mocked
             </h2>
 
             <dl className="mt-6 space-y-4">

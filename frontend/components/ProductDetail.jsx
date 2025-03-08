@@ -32,18 +32,24 @@ const ProductDetail = () => {
     setSelectedParts((prev) => ({ ...prev, [partType]: partName }));
   };
 
+  const totalQuantity = (items) => {
+    return items.reduce((total, item) => total + item.quantity, 0);
+  };
+
   const handleAddToCart = async () => {
     const formattedConfiguration = Object.entries(configuration).map(
       ([key, value]) => ({ [key]: value })
     );
 
-    const prevItems = cart.items.length;
-    console.log("prevItems", prevItems);
+    const prevItemsQuantity = totalQuantity(cart.items);
+
     setIsInvalid(false);
     await addToCart(productId, formattedConfiguration, product);
-    console.log("prevItems2", cart.items.length);
-    console.log("cart", cart.error);
-    if (prevItems === cart.items.length) {
+
+    if (
+      prevItemsQuantity === totalQuantity(cart.items) &&
+      cart.error !== null
+    ) {
       setIsInvalid(true);
     }
   };

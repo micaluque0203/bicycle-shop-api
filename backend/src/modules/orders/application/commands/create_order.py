@@ -49,10 +49,7 @@ async def create_order_command(
                 filter={"$in": product["configuration_rules_ids"]}
             )
 
-            print("PRODUCT RULES", product_rules)
-
             config = Configuration(options=item.configuration)
-            print("PRODUCT RULES config", config)
 
             if not config.is_valid(product_rules):
                 return CommandResult.failure(

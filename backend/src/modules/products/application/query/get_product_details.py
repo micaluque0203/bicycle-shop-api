@@ -19,8 +19,6 @@ async def get_product_details(
 ) -> QueryResult:
     product = await product_repository.get_by_id(query.product_id)
 
-    print(product)
-
     if product is None:
         raise ValueError("Product not found")
 

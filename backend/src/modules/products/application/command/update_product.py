@@ -24,7 +24,5 @@ async def update_product_command(
         configuration_rule_ids=command.configuration_rule_ids,
     )
     updated_product = await repository.update(product)
-    print("UPDATED PRODUCT", updated_product)
     event = ProductUpdatedEvent(product_id=updated_product.upserted_id)
-    print("EVENT", event)
     return CommandResult(entity_id=updated_product.upserted_id, events=[event])

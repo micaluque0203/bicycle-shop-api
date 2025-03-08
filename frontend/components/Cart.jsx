@@ -7,7 +7,11 @@ import CartItem from "./CartItem.jsx";
 export function Cart() {
   const cartId = useId();
   const { cart } = useCart();
-  console.log(cart);
+  const totalQuantity = cart.items.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
+
   return (
     <>
       <Popover className="ml-4 flow-root text-sm lg:relative lg:ml-8">
@@ -21,7 +25,7 @@ export function Cart() {
             className="size-6 shrink-0 text-gray-400 group-hover:text-gray-500"
           />
           <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
-            {cart.items.length}
+            {totalQuantity}
           </span>
           <span className="sr-only">items in cart, view bag</span>
         </PopoverButton>

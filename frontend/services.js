@@ -102,13 +102,11 @@ export const validateOrderItem = async (configuration) => {
   const response = await api.post("/validate-order-item", configuration);
   console.log("validateOrderItem response", response.data);
   if (response.status === 400) {
-    alert("Invalid configuration");
     return { is_valid: false };
   }
   if (response.status === 200) {
     return response.data;
   } else {
-    alert("Invalid configuration");
     throw new Error(`Invalid configuration`);
   }
 };

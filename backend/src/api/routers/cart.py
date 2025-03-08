@@ -46,7 +46,6 @@ async def add_to_cart(
     order_created = await create_order_command(
         order_command, repository, product_repository, rules_repository
     )
-    print("ORDER CREATED DAO", order_created)
     return Order(id=order_created.entity_id, **order_created.payload)
 
 
@@ -70,12 +69,3 @@ async def validate_order_item(
         raise HTTPException(status_code=400, detail=response.errors[0][0])
 
     return ValidateOrderItemResponse(is_valid=True)
-
-
-# @router.get("/cart", response_model=Order, dependencies=[Depends(current_active_user)])
-# async def get_cart():
-#     user = current_active_user
-#     order = repo.get_order(user.id, "pending")
-#     if not order:
-#         raise HTTPException(status_code=404, detail="Cart is empty")
-#     return order

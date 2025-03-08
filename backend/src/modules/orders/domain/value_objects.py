@@ -58,8 +58,6 @@ class Configuration(BaseModel):
                 and part.stock_status == StockStatus.AVAILABLE
             )
 
-            print("PART IN STOCK", part_in_stock, part_type, part_name)
-
             if not part_in_stock:
                 return False
 

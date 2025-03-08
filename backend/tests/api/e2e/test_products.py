@@ -40,9 +40,7 @@ class TestProducts:
     @pytest.mark.asyncio
     async def test_get_products(self, mongodb, product, client_no_auth):
         product_created = await mongodb["products"].insert_one(product)
-        print(product_created)
         response = await client_no_auth.get("/products")
-        print(response.json())
         assert response.status_code == 200
         assert len(response.json()) > 0
         assert response.json()[0]["product_id"] == str(product_created.inserted_id)
