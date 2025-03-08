@@ -96,7 +96,7 @@ bicycle-shop-api/
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#f4f4f4', 'primaryTextColor': '#333333', 'primaryBorderColor': '#cccccc', 'lineColor': '#cccccc', 'tertiaryColor': '#ffffff'}}}%%
 classDiagram
-    Enum OrderStatus {
+    class OrderStatus {
         <<enumeration>>
         PENDING
         CANCELLED
