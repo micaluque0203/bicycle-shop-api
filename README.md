@@ -39,8 +39,8 @@ The requirements of the project can be found [here](./scope.md).
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/bicycle-shop.git
-   cd bicycle-shop
+   git clone https://github.com/micaluque0203/bicycle-shop-api.git
+   cd bicycle-shop-api
    ```
 
 2. Start the application using Docker Compose:
@@ -63,43 +63,137 @@ For detailed information on each endpoint, including request and response exampl
 
 ## Project Structure
 
+```plaintext
+bicycle-shop-api/
+├── backend/
+│   ├── Dockerfile
+│   ├── requirements.txt
+│   ├── src/
+│   │   ├── api/ # FAST API, backend routes definition
+│   │   ├── modules/
+│   │   │   ├── iam/ # Users Boundary, not implemented since FastAPI Users was used due to time constraints
+│   │   │   ├── orders/ # Orders Boundary module
+│   │   │   ├── products/ # Product Boundary module
+│   │   └── core/ # Interfaces used for Business Logic in modules
+├── frontend/
+│   ├── Dockerfile
+│   ├── package.json
+│   ├── components/ # Directory containing reusable React components
+│   ├── context/ # Context API files for managing global state and context.
+│   ├── hooks/ # Custom React hooks for encapsulating reusable logic
+│   ├── reducers/ # Reducers for managing state changes based on actions
+│   ├── pages/ # Directory containing page components for different routes in the application
+│   ├── src/
+│   │   ├── main.jsx # Entry point for the React application.
+│   │   ├── App.jsx # Main application component that sets up routing
+│   │   └── ...
+├── compose.yml
+└── README.md
+```
+
+## Domain-Driven Design (DDD) of the Backend
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#f4f4f4', 'primaryTextColor': '#333333', 'primaryBorderColor': '#cccccc', 'lineColor': '#cccccc', 'tertiaryColor': '#ffffff'}}}%%
+classDiagram
+    Enum OrderStatus {
+        <<enumeration>>
+        PENDING
+        CANCELLED
+        FULFILLED
+    }
+
+    class ConfigurationOption {
+        key: str
+        value: str
+    }
+
+    class Configuration {
+        options: List~ConfigurationOption~
+        +is_valid(rules: List~ConfigurationRule~): bool
+        +is_in_stock(parts: List~Part~): bool
+    }
+
+    class OrderItem {
+        product_id: PydanticObjectId
+        configuration: List~Dict~str, str~~
+    }
+
+    class Order {
+        user_id: PydanticObjectId
+        order_items: List~OrderItem~ = []
+        status: OrderStatus = OrderStatus.PENDING
+        +add_item(configuration: Configuration, product: Product, rules: List~ConfigurationRule~, parts: List~Part~): bool
+        +cancel()
+        +fulfill()
+    }
+
+    class ConfigurationRule {
+        depends_on: PartCategoryName
+        depends_value: str
+        forbidden_values: List~str~
+    }
+
+    class Part {
+        part_type: PartCategoryName
+        name: str
+        stock_status: StockStatus = StockStatus.AVAILABLE
+        +is_available(): bool
+    }
+
+    class Product {
+        name: str
+        category: str
+        part_ids: List~PydanticObjectId~ = []
+        configuration_rule_ids: List~PydanticObjectId~ = []
+        +is_configuration_allowed(configuration: Configuration, rules: List~ConfigurationRule~): bool
+    }
+
+    Configuration --> ConfigurationRule : uses
+    Configuration --> Part : checks
+    Order --> OrderItem : contains
+    Order --> OrderStatus : has
+    OrderItem --> Configuration : has
+    OrderItem --> Product : refers to
+    Product --> ConfigurationRule : uses
+    Product --> Part : uses
+```
+
 ## Tradeoffs and Decisions
 
 During the development of this project, several tradeoffs and decisions were made to balance various factors such as performance, maintainability, scalability and speed of development. Below are the key tradeoffs and decisions:
 
 ### 1. Technology Stack
 
-**Decision:** Opted for a React and FastAPI stack.
-**Tradeoff:** While using React for the frontend allows for a highly interactive user interface and FastAPI for the backend offers fast performance and easy API creation, there may be a learning curve for developers unfamiliar with these technologies. Additionally, integrating the two can require additional setup and configuration compared to more traditional stacks.
+Opted for a React and FastAPI stack.
+While using React for the frontend allows for a highly interactive user interface and FastAPI for the backend offers fast performance and easy API creation, there may be a learning curve for developers unfamiliar with these technologies. Additionally, integrating the two can require additional setup and configuration compared to more traditional stacks.
 
 ### 2. Database Choice
 
-**Decision:** Chose MongoDB as the primary database.
-**Tradeoff:** MongoDB offers flexibility with its schema-less design, which is great for rapid development and basic CRUD queries. However, it may result in higher complexity for relational data queries compared to SQL databases.
+Chose MongoDB as the primary database.
+MongoDB offers flexibility with its schema-less design, which is great for rapid development and basic CRUD queries. However, it may result in higher complexity for relational data queries compared to SQL databases.
 
 ### 3. State Management
 
-**Decision:** Utilized `useContext` and `useReducer` for state management in the React application.
-**Tradeoff:** `useContext` and `useReducer` provide a simpler and more localized state management solution compared to Redux but do not offer the same level of tooling and middleware support.
+Utilized `useContext` and `useReducer` for state management in the React application.
+`useContext` and `useReducer` provide a simpler and more localized state management solution compared to Redux but do not offer the same level of tooling and middleware support.
 
 ### 4. Styling Framework
 
-**Decision:** Used Tailwind CSS for styling.
-**Tradeoff:** Tailwind CSS allows for rapid UI development with utility-first classes, but it can lead to verbose HTML and potentially larger bundle sizes if not purged correctly.
+Used Tailwind CSS for styling.
+Tailwind CSS allows for rapid UI development with utility-first classes, but it can lead to verbose HTML and potentially larger bundle sizes if not purged correctly.
 
 ### 5. Authentication
 
-**Decision:** Implemented JWT (JSON Web Tokens) for authentication and use FAST API users for sign in / login.
-**Tradeoff:** JWT offers stateless authentication, which is scalable and easy to implement. However, it requires careful handling of token expiration and security considerations. The use of FAST API users
+Implemented JWT (JSON Web Tokens) for authentication and use FAST API users for sign in / login.
+JWT offers stateless authentication, which is scalable and easy to implement. However, it requires careful handling of token expiration and security considerations. The use of FAST API users
 
 ### 6. Domain-Driven Design (DDD)
 
-**Decision:** Implemented Domain-Driven Design to separate domain logic from infrastructure concerns.
-**Tradeoff:** DDD provides a structured approach to managing complex and scalable applications but can introduce additional complexity, verbosity and require more upfront design.
+Implemented Domain-Driven Design to separate domain logic from infrastructure concerns.
+DDD provides a structured approach to managing complex and scalable applications but can introduce additional complexity, verbosity and require more upfront design.
 
 ### 7. Speed of Development
 
-**Decision:** Prioritized rapid development and delivery.
-**Tradeoff:** To achieve quick development cycles, some architectural and code quality compromises were made. This includes using pre-built components and libraries where applicable, which may not be fully optimized for specific use cases but allow for faster implementation.
-
-These tradeoffs and decisions were made to balance the project's requirements and constraints. During our call, I will provide further explanations and insights into these choices
+Prioritized rapid development and delivery.
+To achieve quick development cycles, some architectural and code quality compromises were made. This includes using pre-built components and libraries where applicable, which may not be fully optimized for specific use cases but allow for faster implementation.
