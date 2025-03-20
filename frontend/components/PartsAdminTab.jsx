@@ -32,8 +32,8 @@ const PartsAdminTab = () => {
     setCurrentPart({ ...currentPart, [name]: value });
   };
 
-  const handleCategoryChange = (type) => {
-    setCurrentPart({ ...currentPart, type });
+  const handleCategoryChange = (category) => {
+    setCurrentPart({ ...currentPart, category });
   };
 
   const handleStatusChange = (stock_status) => {
@@ -65,7 +65,7 @@ const PartsAdminTab = () => {
     };
     try {
       if (isEdit) {
-        await updatePart(payload);
+        await updatePart(currentPart.id, payload);
         fetchParts();
       } else {
         await addPart(payload);

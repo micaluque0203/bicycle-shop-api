@@ -3,14 +3,12 @@ from motor.motor_asyncio import AsyncIOMotorClient
 
 from api.settings import Settings
 from modules.iam.domain.entities import User
-from modules.orders.infrastructure.orders_repository import \
-    MongoDBOrdersRepository
-from modules.products.infrastructure.parts_repository import \
-    MongoDBPartsRepository
-from modules.products.infrastructure.product_repository import \
-    MongoDBProductRepository
-from modules.products.infrastructure.rules_repository import \
-    MongoDBConfigurationRulesRepository
+from modules.orders.infrastructure.orders_repository import MongoDBOrdersRepository
+from modules.products.infrastructure.parts_repository import MongoDBPartsRepository
+from modules.products.infrastructure.product_repository import MongoDBProductRepository
+from modules.products.infrastructure.rules_repository import (
+    MongoDBConfigurationRulesRepository,
+)
 
 
 class MongoDB:
@@ -22,7 +20,7 @@ class MongoDB:
         self.settings = Settings()
         self.client = AsyncIOMotorClient(self.settings.mongodb_url)
         self.db = self.client[self.settings.database_name]
-        ## await self.init_db()
+        # await self.init_db()
         return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):

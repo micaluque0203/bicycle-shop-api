@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from core.domain.entities import Entity
 from core.domain.repositories import GenericRepository
 from core.domain.value_objects import PydanticObjectId
+from bson import ObjectId
 
 T = TypeVar("T", bound=BaseModel)
 ID = TypeVar("ID", bound=PydanticObjectId)
@@ -38,8 +39,13 @@ class MongoDBBaseRepository(GenericRepository[ID, T]):
         return [self.entity_class(**document) for document in documents]
 
     async def update(self, entity: T) -> T:
+        print(entity.model_dump(exclude_none=True, exclude={"id"}), entity.id)
+
         updated_entity = await self.collection.update_one(
-            {"_id": entity.id},
+            {"_id": ObjectId(entity.id)},
             {"$set": entity.model_dump(exclude_none=True, exclude={"id"})},
         )
+
+        new_entity = await self.collection.find_one({"_id": ObjectId(entity.id)})
+        print(new_entity)
         return updated_entity

@@ -11,3 +11,9 @@ class PartResponse(BaseModel):
     part_type: PartCategoryName
     name: str
     stock_status: StockStatus
+
+
+class UpdatePartRequest(BaseModel):
+    part_type: PartCategoryName
+    name: str
+    stock_status: StockStatus = StockStatus.AVAILABLE

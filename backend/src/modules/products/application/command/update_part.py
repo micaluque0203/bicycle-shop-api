@@ -17,17 +17,12 @@ async def update_part_command(
     command: UpdatePartCommand, repository: PartRepository
 ) -> CommandResult:
     part = Part(
-        id=command.part_id,
+        _id=command.part_id,
         part_type=command.part_type,
         name=command.name,
         stock_status=command.stock_status,
     )
     updated_part = await repository.update(part)
 
-    event = PartUpdatedEvent(
-        part_id=updated_part.id,
-        part_type=updated_part.part_type,
-        name=updated_part.name,
-        stock_status=updated_part.stock_status,
-    )
-    return CommandResult(entity_id=updated_part.id, events=[event])
+    event = PartUpdatedEvent(part_id=updated_part.upserted_id)
+    return CommandResult(entity_id=updated_part.upserted_id, events=[event])

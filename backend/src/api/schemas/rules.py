@@ -9,3 +9,13 @@ class ConfigurationRuleResponse(BaseModel):
     depends_on: str
     depends_value: str
     forbidden_values: List[str]
+
+
+class ConfigurationRuleUpdateResponse(BaseModel):
+    rule_id: PydanticObjectId = Field(alias="id")
+
+
+class UpdateConfigurationRuleRequest(BaseModel):
+    depends_on: str
+    depends_value: str
+    forbidden_values: List[str]

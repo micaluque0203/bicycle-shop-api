@@ -16,21 +16,19 @@ class UpdateConfigurationRuleCommand(Command):
 async def update_configuration_rule_command(
     command: UpdateConfigurationRuleCommand, repository: ConfigurationRuleRepository
 ) -> CommandResult:
-
     rule = ConfigurationRule(
-        id=command.rule_id,
+        _id=command.rule_id,
         depends_on=command.depends_on,
         depends_value=command.depends_value,
         forbidden_values=command.forbidden_values,
     )
-
     updated_rule = await repository.update(rule)
 
     event = ConfigurationRuleUpdatedEvent(
-        rule_id=updated_rule.id,
-        depends_on=updated_rule.depends_on,
-        depends_value=updated_rule.depends_value,
-        forbidden_values=updated_rule.forbidden_values,
+        rule_id=updated_rule.upserted_id,
+        depends_on=rule.depends_on,
+        depends_value=rule.depends_value,
+        forbidden_values=rule.forbidden_values,
     )
 
-    return CommandResult(entity_id=updated_rule.id, events=[event])
+    return CommandResult(entity_id=updated_rule.upserted_id, events=[event])

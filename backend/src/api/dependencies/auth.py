@@ -3,8 +3,11 @@ import contextlib
 from beanie import PydanticObjectId
 from fastapi import Depends
 from fastapi_users import FastAPIUsers
-from fastapi_users.authentication import (AuthenticationBackend,
-                                          BearerTransport, JWTStrategy)
+from fastapi_users.authentication import (
+    AuthenticationBackend,
+    BearerTransport,
+    JWTStrategy,
+)
 from fastapi_users_db_beanie import BeanieUserDatabase
 
 from api.settings import Settings
@@ -46,9 +49,8 @@ def get_current_user():
 
 
 def get_current_superuser():
-    user = fastapi_users.current_user(active=True, superuser=True)
-    return user
+    return fastapi_users.current_user(active=True)
 
 
-current_superuser = get_current_user()
-current_active_user = get_current_superuser()
+current_superuser = get_current_superuser()
+current_active_user = get_current_user()

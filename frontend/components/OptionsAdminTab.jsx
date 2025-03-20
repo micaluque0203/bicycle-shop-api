@@ -82,8 +82,8 @@ const OptionsAdminTab = () => {
     };
     try {
       if (isEdit) {
-        await updateRule({ rule_id: currentOption.id, ...payload });
-        fetchProducts();
+        await updateRule(currentOption.id, payload);
+        fetchRules();
       } else {
         await addRule(payload);
         fetchRules();

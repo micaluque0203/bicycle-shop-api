@@ -17,7 +17,7 @@ async def update_product_command(
     command: UpdateProductCommand, repository: ProductRepository
 ) -> CommandResult:
     product = Product(
-        id=command.product_id,
+        _id=command.product_id,
         name=command.name,
         category=command.category,
         part_ids=command.part_ids,
